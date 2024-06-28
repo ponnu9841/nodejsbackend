@@ -14,27 +14,37 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
-  phone     String   @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(uuid())
+  name       String   @db.VarChar(255)
+  email      String   @unique @db.VarChar(255)
+  password   String   @db.VarChar(255)
+  phone      String?  @unique @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Todo       Todo[]
+
   @@map("users")
 }
 
 model Todo {
-  id          Int    @id @default(autoincrement())
-  title       String @db.VarChar(255)
-  description String @db.VarChar(255)
+  id          String   @id @default(uuid())
+  title       String   @db.VarChar(255)
+  description String   @db.VarChar(255)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id     String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
   Item        Item[]
+
   @@map("todos")
 }
 
 model Item {
-  id           Int     @id @default(autoincrement())
+  id           String  @id @default(uuid())
   title        String  @db.VarChar(255)
   is_completed Boolean @default(false)
-  todo         Todo    @relation(fields: [todo_id], references: [id])
-  todo_id      Int
+  todo         Todo    @relation(fields: [todo_id], references: [id], onDelete: Cascade)
+  todo_id      String
+
   @@map("items")
 }

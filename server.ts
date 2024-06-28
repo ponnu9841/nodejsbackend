@@ -1,13 +1,21 @@
 // const express = require('express');
 // const { PrismaClient } = require('@prisma/client');
 import express, { type Express, type Request, type Response } from "express";
-import todos from "./routes/Todo";
+import User from "./routes/User"
+import Todo from "./routes/Todo";
+import Item from "./routes/Item";
 
 const app: Express = express();
-// const prisma = new PrismaClient();
 
+// Middleware to parse JSON bodies
+app.use(express.json());
 
-app.use("/todo", todos);
+// Middleware to parse URL-encoded bodies
+// app.use(express.urlencoded({ extended: true }));
+
+app.use("/user", User);
+app.use("/todo", Todo);
+app.use("/todo/item", Item);
 
 app.listen(3000);
 
